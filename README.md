@@ -2,6 +2,12 @@
 
 PHANTOM TRACE reviews AI-agent trace files in your browser. It combines deterministic checks for malformed events, missing references, and explicit date mismatches with an optional local language-model review of claims and cited evidence.
 
+## Public links
+
+- **Demo:** [ralhamdan1412-eng.github.io/phantom-trace-challenge](https://ralhamdan1412-eng.github.io/phantom-trace-challenge/)
+- **Source:** [github.com/ralhamdan1412-eng/phantom-trace-challenge](https://github.com/ralhamdan1412-eng/phantom-trace-challenge)
+- **DEV challenge write-up:** [PHANTOM TRACE: Finding the Ghost Between an Agent's Claim and Its Evidence](https://dev.to/raed_alhamdan_be31f9ae44c/phantom-trace-finding-the-ghost-between-an-agents-claim-and-its-evidence-118o)
+
 ## Privacy
 
 Trace content is processed in the browser and is not sent to a project backend or an inference API. The optional model is downloaded by the browser from Hugging Face on first use; model requests disclose standard network metadata to that hosting service. Use synthetic data for the public demo. This project has not undergone a security audit.
