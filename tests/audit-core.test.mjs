@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {validateTrace,auditTrace} from '../src/audit-core.mjs';
+const base = {title:'Synthetic demo',events:[{id:'e1',type:'log',time:'2026-10-27T10:00:00Z',content:'Started process',references:[]}]};
+test('accepts a valid trace',()=>assert.equal(validateTrace(base).ok,true));
+test('rejects duplicate IDs',()=>assert.match(validateTrace({...base,events:[...base.events,{...base.events[0]}]}).errors.join(' '),/Duplicate event id/));
+test('detects missing references',()=>assert.equal(auditTrace({...base,events:[{...base.events[0],references:['missing']}]}).findings[0].code,'MISSING_REFERENCE'));
+test('does not flag arbitrary numbers as dates',()=>assert.equal(auditTrace({...base,events:[{...base.events[0],content:'version 1234 and code 42'}]}).findings.length,0));
+test('flags explicit conflicting ISO date as heuristic warning',()=>assert.equal(auditTrace({...base,events:[{...base.events[0],content:'reported on 2026-10-20'}]}).findings[0].severity,'warning'));
+test('rejects non-object input',()=>assert.equal(validateTrace(null).ok,false));
