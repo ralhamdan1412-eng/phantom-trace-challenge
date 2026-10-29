@@ -28,9 +28,9 @@ The production files are generated in `dist/`.
 
 ## AI and model attribution
 
-Local review uses Transformers.js (`@huggingface/transformers`) and `HuggingFaceTB/SmolLM2-135M-Instruct`. The model card states Apache-2.0 and the same repository provides ONNX variants, including `model_q4.onnx`. Model files are fetched by the browser on first use and are not included here. The model is English-oriented and may be inaccurate; results are hypotheses requiring human review.
+Local review uses Transformers.js (`@huggingface/transformers`) with `Xenova/nli-deberta-v3-base`. This is an ONNX (q8, about 244 MB) conversion of the natural-language-inference cross-encoder `cross-encoder/nli-deberta-v3-base`, whose model card states Apache-2.0. Each claim is scored against each existing evidence event it cites. Entailment, contradiction and neutral map to supported, contradicted and insufficient. A verdict below p=0.80 is reported as insufficient. Model files are fetched by the browser from Hugging Face on first use, and the ONNX Runtime WebAssembly files from cdn.jsdelivr.net. Trace text is not sent to either. Model files are not included here.
 
-The model is a small English-oriented assistant. AI assessments are hypotheses; the application checks citation IDs deterministically and requires human review. Actual browser inference on this release candidate has not yet been verified.
+An earlier generative model (`SmolLM2-135M-Instruct`) was replaced. In real runs it never returned the required JSON, and when limited to the three labels it chose "supported" even for contradictions. Every result still passes the strict citation validator, and a failure on one claim is marked unassessed without affecting the others. On the synthetic demo, browser inference returned EV-002 contradicted (EV-001), EV-003 insufficient (EV-404 missing) and EV-005 supported (EV-004). The model is English-oriented and can be wrong: in an 11-pair synthetic check it matched the expected label 8 times. Results are hypotheses that require human review.
 
 ## License
 

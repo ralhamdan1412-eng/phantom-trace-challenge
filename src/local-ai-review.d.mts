@@ -1,4 +1,11 @@
 export type LocalReviewTrace = { events: Array<{ id: string; type: string; content: string; references?: string[] }> };
 export type AIReview = { claimId: string; assessment: 'supported' | 'contradicted' | 'insufficient'; evidenceIds: string[]; reason: string };
-export function buildReviewPrompt(trace: LocalReviewTrace): string;
+export type NliProbabilities = Record<AIReview['assessment'], number>;
+export type NliOutput = { logits: ArrayLike<number>; id2label: Record<number | string, string> };
+export const MIN_NLI_CONFIDENCE: number;
+export const FAIL_CLOSED_REASON: string;
+export function collectClaimEvidence(trace: LocalReviewTrace, claimId: string): { claim: { id: string; type: string; content: string; references: string[] }; evidence: Array<{ id: string; type: string; content: string; references: string[] }>; missingReferences: string[] };
+export function nliProbabilities(logits: ArrayLike<number>, id2label: Record<number | string, string>): NliProbabilities;
+export function assessClaimFromNli(trace: LocalReviewTrace, claimId: string, evidenceScores: Array<{ evidenceId: string; probabilities: NliProbabilities }>): AIReview;
+export function reviewTraceClaims(trace: LocalReviewTrace, scorePair: (premise: string, hypothesis: string) => Promise<NliOutput>, onReject?: (claimId: string, error: unknown) => void): Promise<AIReview[]>;
 export function validateReviewResponse(raw: string, trace: LocalReviewTrace): AIReview[];
